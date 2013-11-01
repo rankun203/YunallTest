@@ -70,6 +70,7 @@
                     $("#rl1 div.panel-heading").text("结果列表(" + results.length + ")");
                     for (var i = 0; i < results.length; i++) {
                         var object = results[i];
+                        $("#resultList").empty();
                         $("#resultList").append('<li>'+object.get('foo')+'</li>');
                     }
                     $("#tip1").text("Data as shown below.");
