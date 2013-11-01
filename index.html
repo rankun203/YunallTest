@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <title>Test Yunall API</title>
+    <style type="text/css">
+        h1{
+            float: left;
+        }
+        .clearboth{
+            clear: both;
+        }
+        #tip1{
+            display: inline-block;
+            line-height: 40px;
+        }
+        .myRow1{
+            height: 50px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Yunall API Test</h1><span id="tip1"></span>
+    <div class="clearboth"></div>
+    <form action="#" id="form1">
+        <div class="row myRow1">
+            <div class="col-md-8">
+                <input class="form-control" type="text" id="input1"/>
+            </div>
+            <div class="col-md-4">
+                <input class="btn btn-default" type="submit" value="Just Click" id="btn1"/>
+            </div>
+        </div>
+    </form>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel panel-info" id="rl1">
+                <div class="panel-heading">结果列表</div>
+                <div class="panel-body">
+                    <ol id="resultList"></ol>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8"></div>
+    </div>
+</div>
+
+<script src="https://user.yunall.net/scripts/parse.min.js"></script>
+<script src="js/jquery.min.js"></script>
+<script type="text/javascript">
+    Parse.initialize("3iuZzQcF2r5TAoHkKzpeAl", "JuPRCU0xLYGnY0MWBahgF1mXnjLb63Ux5dhwaifay2r");
+    $("#form1").submit(function () {
+        if (clickCount.number % 2 == 0) {
+            $("#tip1").text("Pushing Data.");
+            var input1Str = $("input#input1").val();
+            var TestObject = Parse.Object.extend("FirstObject");
+            var testObject = new TestObject();
+            testObject.save({foo: input1Str}, { success: function(object) {
+                $("#tip1").text("foo: '" + input1Str + "' pushed.");
+                $("#tip1").text("Click Button again to retrieve Object from server.");
+            }});
+        } else {
+            $("#tip1").text("Receiving Data.");
+            var FirstObject = Parse.Object.extend("FirstObject");
+            var query = new Parse.Query(FirstObject);
+            query.find({
+                success: function(results) {
+                    $("#rl1 div.panel-heading").text("结果列表(" + results.length + ")");
+                    for (var i = 0; i < results.length; i++) {
+                        var object = results[i];
+                        $("#resultList").append('<li>'+object.get('foo')+'</li>');
+                    }
+                    $("#tip1").text("Data as shown below.");
+                    $("#tip1").text("Click button to submit Object.");
+                },
+                error: function(error) {
+                    $("tip1").text("Object retrieve was failed.");
+                }
+            });
+        }
+        ++clickCount.number;
+        console.log("clickCount.number = " + clickCount.number);
+        return false;
+    });
+    var clickCount = {
+        number : 0
+    }
+</script>
+</body>
+</html>
