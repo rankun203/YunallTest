@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
     <title>Test Yunall API</title>
@@ -34,7 +35,7 @@
                 <input class="form-control" type="text" id="input1"/>
             </div>
             <div class="col-md-2 col-xs-6">
-                <input class="btn btn-default" type="submit" value="Push" id="btn1"/>
+                <input class="btn btn-default" type="submit" value="Save" id="btn1"/>
             </div>
             <div class="col-md-2 col-xs-6">
                 <input class="btn btn-default" type="button" value="Hand Get" id="btn2"/>
@@ -75,7 +76,7 @@
     });
     var YunallOpr = {
         push : function () {
-            $("#tip1").text("Pushing Data.");
+            $("#tip1").text("Saving Data.");
             var input1Str = $("input#input1").val();
             var TestObject = Parse.Object.extend("FirstObject");
             var testObject = new TestObject();
@@ -106,7 +107,7 @@
                     $("tip1").text("Object retrieve was failed.");
                 }
             });
-            $("#btn1").val("Push");
+            $("#btn1").val("Save");
         }
     }
     var clickCount = {
