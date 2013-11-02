@@ -81,12 +81,14 @@
     });
     var YunallOpr = {
         push : function () {
-            $("#tip1").text("Saving Data.");
+            $("#tip1").text("Verifying Input.");
             var input1Str = $("input#input1").val();
             if(input1Str.length == 0) {
                 $("#form-group1").addClass("has-error");
+                $("#tip1").text("Please input some words.");
                 return false;
             }
+            $("#tip1").text("Saving Data.");
             var TestObject = Parse.Object.extend("FirstObject");
             var testObject = new TestObject();
             testObject.save({foo: input1Str}, { success: function(object) {
