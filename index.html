@@ -24,13 +24,16 @@
 <div class="container">
     <h1>Yunall API Test</h1><span id="tip1"></span>
     <div class="clearboth"></div>
-    <form action="#" id="form1">
+    <form id="form1" onsubmit="return false;">
         <div class="row myRow1">
             <div class="col-md-8">
                 <input class="form-control" type="text" id="input1"/>
             </div>
-            <div class="col-md-4">
-                <input class="btn btn-default" type="submit" value="Just Click" id="btn1"/>
+            <div class="col-md-2">
+                <input class="btn btn-default" type="submit" value="Push" id="btn1"/>
+            </div>
+            <div class="col-md-2">
+                <input class="btn btn-default" type="button" value="Hand Get"/>
             </div>
         </div>
     </form>
@@ -39,7 +42,7 @@
             <div class="panel panel-info" id="rl1">
                 <div class="panel-heading">结果列表</div>
                 <div class="panel-body">
-                    <ol id="resultList"></ol>
+                    <ol id="resultList" type="1"></ol>
                 </div>
             </div>
         </div>
@@ -51,7 +54,7 @@
 <script src="js/jquery.min.js"></script>
 <script type="text/javascript">
     Parse.initialize("3iuZzQcF2r5TAoHkKzpeAl", "JuPRCU0xLYGnY0MWBahgF1mXnjLb63Ux5dhwaifay2r");
-    $("#form1").submit(function () {
+    $("#btn1").click(function () {
         if (clickCount.number % 2 == 0) {
             $("#tip1").text("Pushing Data.");
             var input1Str = $("input#input1").val();
@@ -60,6 +63,7 @@
             testObject.save({foo: input1Str}, { success: function(object) {
                 $("#tip1").text("foo: '" + input1Str + "' pushed.");
                 $("#tip1").text("Click Button again to retrieve Object from server.");
+                $("#btn1").val("Get");
             }});
         } else {
             $("#tip1").text("Receiving Data.");
@@ -71,7 +75,10 @@
                     $("#resultList").empty();
                     for (var i = 0; i < results.length; i++) {
                         var object = results[i];
-                        $("#resultList").append('<li>'+object.get('foo')+'</li>');
+                        var rlChildrenFirst = $("#resultList li:first");
+                        rlChildrenFirst ?
+                                $("#resultList").append('<li>'+object.get('foo')+'</li>')
+                                : rlChildrenFirst.before("<li>'+object.get('foo')+'</li>");
                     }
                     $("#tip1").text("Data as shown below.");
                     $("#tip1").text("Click button to submit Object.");
@@ -80,10 +87,10 @@
                     $("tip1").text("Object retrieve was failed.");
                 }
             });
+            $("#btn1").val("Push");
         }
         ++clickCount.number;
         console.log("clickCount.number = " + clickCount.number);
-        return false;
     });
     var clickCount = {
         number : 0
