@@ -31,7 +31,7 @@
     <div class="clearboth"></div>
     <form id="form1" onsubmit="return false;">
         <div class="row myRow1">
-            <div class="col-md-8 col-xs-12">
+            <div class="col-md-8 col-xs-12 form-group" id="form-group1">
                 <input class="form-control" type="text" id="input1"/>
             </div>
             <div class="col-md-2 col-xs-6">
@@ -67,9 +67,14 @@
     });
     $("#btn1").click(function () {
         if (clickCount.number % 2 == 0) {
-            YunallOpr.push();
+            $("#form-group1").removeClass("has-error");
+            if(!YunallOpr.push()) {
+                return;
+            }
         } else {
-            YunallOpr.get();
+            if(!YunallOpr.get()) {
+                return;
+            }
         }
         ++clickCount.number;
         console.log("clickCount.number = " + clickCount.number);
@@ -78,12 +83,17 @@
         push : function () {
             $("#tip1").text("Saving Data.");
             var input1Str = $("input#input1").val();
+            if(input1Str.length == 0) {
+                $("#form-group1").addClass("has-error");
+                return false;
+            }
             var TestObject = Parse.Object.extend("FirstObject");
             var testObject = new TestObject();
             testObject.save({foo: input1Str}, { success: function(object) {
-                $("#tip1").text("foo: '" + input1Str + "' pushed.");
+                $("#tip1").text("{foo: '" + input1Str + "'} pushed.");
                 $("#btn1").val("Get");
             }});
+            return true;
         },
         get : function () {
             $("#tip1").text("Receiving Data.");
@@ -108,6 +118,7 @@
                 }
             });
             $("#btn1").val("Save");
+            return true;
         }
     }
     var clickCount = {
