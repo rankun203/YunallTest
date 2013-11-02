@@ -15,30 +15,34 @@
             display: inline-block;
             line-height: 40px;
         }
-        .myRow1{
-            height: 50px;
+        input, .panel{
+            margin-top: 10px;
         }
+
     </style>
 </head>
 <body>
+
+
+<!--html start-->
 <div class="container">
     <h1>Yunall API Test</h1><span id="tip1"></span>
     <div class="clearboth"></div>
     <form id="form1" onsubmit="return false;">
         <div class="row myRow1">
-            <div class="col-md-8">
+            <div class="col-md-8 col-xs-12">
                 <input class="form-control" type="text" id="input1"/>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2 col-xs-6">
                 <input class="btn btn-default" type="submit" value="Push" id="btn1"/>
             </div>
-            <div class="col-md-2">
-                <input class="btn btn-default" type="button" value="Hand Get"/>
+            <div class="col-md-2 col-xs-6">
+                <input class="btn btn-default" type="button" value="Hand Get" id="btn2"/>
             </div>
         </div>
     </form>
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-4 col-xs-12">
             <div class="panel panel-info" id="rl1">
                 <div class="panel-heading">结果列表</div>
                 <div class="panel-body">
@@ -49,13 +53,28 @@
         <div class="col-md-8"></div>
     </div>
 </div>
+<!--html end-->
 
+
+<!--script start-->
 <script src="js/parse.min.js"></script>
-<script src="js/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/jquery/1.9.0/jquery.min.js"></script>
 <script type="text/javascript">
     Parse.initialize("3iuZzQcF2r5TAoHkKzpeAl", "JuPRCU0xLYGnY0MWBahgF1mXnjLb63Ux5dhwaifay2r");
+    $("#btn2").click(function () {
+        YunallOpr.get();
+    });
     $("#btn1").click(function () {
         if (clickCount.number % 2 == 0) {
+            YunallOpr.push();
+        } else {
+            YunallOpr.get();
+        }
+        ++clickCount.number;
+        console.log("clickCount.number = " + clickCount.number);
+    });
+    var YunallOpr = {
+        push : function () {
             $("#tip1").text("Pushing Data.");
             var input1Str = $("input#input1").val();
             var TestObject = Parse.Object.extend("FirstObject");
@@ -65,7 +84,8 @@
                 $("#tip1").text("Click Button again to retrieve Object from server.");
                 $("#btn1").val("Get");
             }});
-        } else {
+        },
+        get : function () {
             $("#tip1").text("Receiving Data.");
             var FirstObject = Parse.Object.extend("FirstObject");
             var query = new Parse.Query(FirstObject);
@@ -89,9 +109,7 @@
             });
             $("#btn1").val("Push");
         }
-        ++clickCount.number;
-        console.log("clickCount.number = " + clickCount.number);
-    });
+    }
     var clickCount = {
         number : 0
     }
